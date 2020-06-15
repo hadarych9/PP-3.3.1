@@ -1,20 +1,26 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Войти</title>
 </head>
-<body>
-<h4>Пожалуйста, введите ваши логин и пароль</h4>
-<form th:action="@{/login}" method="post">
-    <input type="text" name="j_username" placeholder="Логин">
-    <br/>
-    <input type="password" name="j_password" placeholder="Пароль">
-    <br/>
-    <br/>
-    <button type="submit">Войти</button>
-</form>
-<br/>
-<a th:href="@{/registration}"><button>Регистрация</button></a>
+<body class="bg-light">
+<div class="mt-5 container">
+    <div class="row justify-content-md-center">
+        <div class="form-group w-25">
+            <form th:action="@{/login}" method="post">
+                <h5>Пожалуйста, авторизуйтесь</h5>
+                <input type="text" class="form-control" name="j_username" placeholder="Логин">
+                <input type="password" class="form-control" name="j_password" placeholder="Пароль">
+                <button type="submit" class="mt-2 btn btn-primary w-100">Войти</button>
+            </form>
+            <br/>
+            <div class="row justify-content-md-center">
+                <a th:href="@{/registration}"><button class="btn btn-secondary">Регистрация</button></a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

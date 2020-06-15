@@ -26,14 +26,18 @@ public class AdminController {
     @Autowired
     SecurityService secService;
 
-    @GetMapping("/adminPage")
+    @GetMapping("")
     public String getAdminPage(ModelMap modelMap){
+        User currentUser = userService.getByName(secService.findLoggedInUsername());
+        modelMap.addAttribute("currentUser", currentUser);
+        modelMap.addAttribute("roles", roleService.getAllRoles());
         modelMap.addAttribute("userData", userService.getAllUsers());
         return "admin/adminPage";
     }
 
     @GetMapping("/add")
-    public ModelAndView addUser() {
+    public ModelAndView addUser(ModelMap modelMap) {
+        modelMap.addAttribute("roles", roleService.getAllRoles());
         return new ModelAndView("admin/add");
     }
 
@@ -41,13 +45,13 @@ public class AdminController {
     public String addUser(User user, String[] roleArray) {
         Set<Role> roleSet = new HashSet<>();
         if(roleArray != null && roleArray.length != 0){
-            for(String roleName : roleArray) roleSet.add(roleService.getByRole(roleName));
+            for(String role : roleArray) roleSet.add(roleService.getByRole(role));
         } else {
-            roleSet.add(roleService.getByRole("user"));
+            roleSet.add(roleService.getByRole("ROLE_user"));
         }
         user.setRoles(roleSet);
         userService.addUser(user);
-        return "redirect:/admin/adminPage";
+        return "redirect:/admin";
     }
 
     @GetMapping("/update")
@@ -55,14 +59,10 @@ public class AdminController {
         User user = userService.getById(id);
         if(user != null) {
             modelMap.addAttribute("user", user);
-            ArrayList<String> roles = new ArrayList<>();
-            for(Role role : user.getRoles()){
-                roles.add(role.getRole());
-            }
-            modelMap.addAttribute("roles", roles);
+            modelMap.addAttribute("roles", roleService.getAllRoles());
             return "admin/update";
         } else {
-            return "redirect:/admin/adminPage";
+            return "redirect:/admin";
         }
     }
 
@@ -70,17 +70,17 @@ public class AdminController {
     public String updateUser(User user, String[] roleArray) {
         Set<Role> roleSet = new HashSet<>();
         if(roleArray != null && roleArray.length != 0){
-            for(String roleName : roleArray) roleSet.add(roleService.getByRole(roleName));
+            for(String role : roleArray) roleSet.add(roleService.getByRole(role));
             user.setRoles(roleSet);
         }
         userService.updateUser(user);
-        return "redirect:/admin/adminPage";
+        return "redirect:/admin";
     }
 
     @GetMapping("/delete")
     public String deleteUser(@RequestParam("id")Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin/adminPage";
+        return "redirect:/admin";
     }
 
     @GetMapping("/drop")
@@ -88,14 +88,14 @@ public class AdminController {
         userService.dropTable();
         roleService.dropTable();
         createAdmin();
-        return "redirect:/admin/adminPage";
+        return "redirect:/admin";
     }
 
     private void createAdmin(){
         String password = "123";
         User admin = new User("admin", password, 0L);
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleService.getByRole("admin"));
+        roleSet.add(roleService.getByRole("ROLE_admin"));
         admin.setRoles(roleSet);
         if(userService.addUser(admin)) secService.autoLogin(admin.getUsername(), password);
     }

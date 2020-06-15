@@ -27,6 +27,7 @@ public class UserController {
     public ModelAndView getUserPage(ModelMap modelMap) {
         User user = userService.getByName(secService.findLoggedInUsername());
         modelMap.addAttribute("user", user);
+        modelMap.addAttribute("roles", roleService.getAllRoles());
         return new ModelAndView("userPage");
     }
 }

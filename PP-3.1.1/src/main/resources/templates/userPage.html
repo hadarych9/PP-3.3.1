@@ -2,27 +2,82 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <title>Страница пользователя <span th:text="${user.username}" th:remove="tag" /></title>
 </head>
-<body>
-<table border="1" cellpadding="5">
-    <thead>
-    <tr>
-        <th>id</th>
-        <th>Логин</th>
-        <th>Возраст</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td><span th:text="${user.id}" /></td>
-        <td><span th:text="${user.username}" /></td>
-        <td><span th:text="${user.age}" /></td>
-    </tr>
-    </tbody>
-</table>
-<br/>
-<a th:href="@{/logout}"><button>Выйти</button></a>
+<body class="bg-light">
+<header class="bg-dark container-fluid text-white">
+    <div class="row">
+        <div class="col mt-2 ml-1">
+            <h5 class="font-weight-light"><span class="font-weight-bold" th:text="${user.username}"></span> с
+                ролями: <span th:each="role : ${user.roles}"><span th:text="${role.name}"/> </span></h5>
+        </div>
+        <div class="col text-right">
+            <a role="button" class="mt-1 pt-1 mb-1 mr-n2 btn btn-outline-secondary bg-transparent border-0"
+               th:href="@{/logout}">Выйти</a>
+        </div>
+    </div>
+</header>
+
+<div class="row container-fluid min-vh-100">
+    <div class="col bg-white">
+        <div class="nav flex-column nav-pills mt-3 mx-n3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-user-tab" data-toggle="pill" href="#v-pills-user" role="tab"
+               aria-controls="v-pills-user" aria-selected="true">Пользователь</a>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="tab-content bg-white" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
+                <div class="container-fluid bg-light">
+                    <h1 class="mt-2 mb-3">Страница пользователя</h1>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mt-1 mb-1">Пользовательские данные</h5>
+                        </div>
+                        <div class="card-body container-fluid">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Логин</th>
+                                    <th>Возраст</th>
+                                    <th>Роль</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="width: 25%" th:text="${user.id}"/>
+                                    <td style="width: 25%" th:text="${user.username}"/>
+                                    <td style="width: 25%" th:text="${user.age}"/>
+                                    <td style="width: 25%">
+                            <span th:each="role : ${user.roles}">
+                                <span th:text="${role.name}"/>
+                                <br/>
+                            </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

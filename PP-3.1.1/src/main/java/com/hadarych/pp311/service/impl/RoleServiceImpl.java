@@ -6,6 +6,8 @@ import com.hadarych.pp311.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -19,11 +21,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void checkRoleEmpty(String role) {
-        if(repository.getByRole("ROLE_" + role) == null){
+        if(repository.getByRole(role) == null){
             String roleName = "";
             if(role.equals("admin")) roleName = "Администратор";
             else if (role.equals("user")) roleName = "Пользователь";
-            repository.saveAndFlush(new Role("ROLE_" + role, roleName));
+            repository.saveAndFlush(new Role(role, roleName));
         }
     }
 
@@ -35,7 +37,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getByRole(String role) {
         checkRoleEmpty(role);
-        return repository.getByRole("ROLE_" + role);
+        return repository.getByRole(role);
+    }
+
+    @Override
+    public Collection getAllRoles() {
+        return repository.findAll();
     }
 
     @Override

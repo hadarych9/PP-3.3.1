@@ -1,22 +1,27 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
 </head>
-<body>
-<h4>Пожалуйста, введите следующие данные:</h4>
-<form th:action="@{/registration}" method="post">
-    <input type="text" name="name" placeholder="Логин">
-    <br/>
-    <input type="password" name="password" placeholder="Пароль">
-    <br/>
-    <input type="number" name="age" placeholder="Возраст">
-    <br/>
-    <br/>
-    <button type="submit">Сохранить</button>
-</form>
-<br/>
-<a th:href="@{/login}"><button>Вернуться</button></a>
+<body class="bg-light">
+<div class="mt-5 container">
+    <div class="row justify-content-md-center">
+        <div class="form-group w-25">
+            <form th:action="@{/registration}" method="post">
+                <h5>Регистрация:</h5>
+                <input type="text" class="form-control" name="name" placeholder="Логин">
+                <input type="password" class="form-control" name="password" placeholder="Пароль">
+                <input type="number" class="form-control" name="age" placeholder="Возраст">
+                <button type="submit" class="mt-2 btn btn-primary w-100">Сохранить</button>
+            </form>
+            <br/>
+            <div class="row justify-content-md-center">
+                <a th:href="@{/login}"><button class="btn btn-secondary">Вернуться</button></a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

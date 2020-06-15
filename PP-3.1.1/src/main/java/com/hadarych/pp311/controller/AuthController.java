@@ -40,7 +40,7 @@ public class AuthController {
     public String registerUser(User user) {
         String password = user.getPassword();
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleService.getByRole("user"));
+        roleSet.add(roleService.getByRole("ROLE_user"));
         user.setRoles(roleSet);
         if(userService.addUser(user)) secService.autoLogin(user.getUsername(), password);
         return "redirect:/user";
