@@ -1,8 +1,10 @@
 package com.hadarych.pp311.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hadarych.pp311.entity.Role;
 import com.hadarych.pp311.entity.User;
 import com.hadarych.pp311.repository.UserRepository;
+import com.hadarych.pp311.service.RoleService;
 import com.hadarych.pp311.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService {
     UserRepository repository;
 
     @Autowired
+    RoleService roleService;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -32,6 +37,11 @@ public class UserServiceImpl implements UserService {
     public boolean addUser(User user) {
         if (doesUserNotExist(user.getUsername())) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            if (user.getRoles().isEmpty()){
+                Set<Role> roleSet = new HashSet<>();
+                roleSet.add(roleService.getByRole("ROLE_user"));
+                user.setRoles(roleSet);
+            }
             repository.saveAndFlush(user);
             return true;
         } else return false;
@@ -39,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Long id) {
-        return repository.getOne(id);
+        return repository.getById(id);
     }
 
     @Override
@@ -53,18 +63,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
-        User existingUser = repository.getOne(user.getId());
+    public boolean updateUser(User user) {
+        User existingUser = repository.getById(user.getId());
+        User check = repository.getById(user.getId());
         System.out.println(existingUser.getUsername());
-        if(!user.getUsername().equals("")) existingUser.setName(user.getUsername());
-        if(!user.getPassword().equals("")) {
+        if(user.getUsername() != null && !user.getUsername().equals("")) existingUser.setName(user.getUsername());
+        if(user.getPassword() != null && !user.getPassword().equals("")) {
             existingUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
-        if(user.getAge() != null) existingUser.setAge(user.getAge());
-        if(user.getRoles() != null) {
+        if(user.getAge() != null && user.getAge() != null) existingUser.setAge(user.getAge());
+        if(user.getRoles() != null && user.getRoles() != null) {
             existingUser.setRoles(user.getRoles());
         }
         repository.saveAndFlush(existingUser);
+        return !check.equals(existingUser);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface UserService extends UserDetailsService {
     User getById(Long id);
     User getByName(String name);
     void deleteUser(Long id);
-    void updateUser(User user);
+    boolean updateUser(User user);
     Collection getAllUsers();
     void dropTable();
 
